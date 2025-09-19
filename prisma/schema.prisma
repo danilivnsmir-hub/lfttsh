@@ -1,0 +1,46 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/workout_app/app/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Exercise {
+  id         Int           @id @default(autoincrement())
+  name       String        @unique
+  muscle_group String
+  is_custom  Boolean       @default(false)
+  created_at DateTime      @default(now())
+  workout_sets WorkoutSet[]
+
+  @@map("exercises")
+}
+
+model Workout {
+  id         Int          @id @default(autoincrement())
+  date       DateTime     @default(now())
+  name       String?
+  created_at DateTime     @default(now())
+  workout_sets WorkoutSet[]
+
+  @@map("workouts")
+}
+
+model WorkoutSet {
+  id         Int      @id @default(autoincrement())
+  workout_id Int
+  exercise_id Int
+  weight     Float
+  reps       Int
+  set_order  Int      @default(1)
+  created_at DateTime @default(now())
+
+  workout    Workout  @relation(fields: [workout_id], references: [id], onDelete: Cascade)
+  exercise   Exercise @relation(fields: [exercise_id], references: [id])
+
+  @@map("workout_sets")
+}

@@ -1,0 +1,284 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+ 
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+ 
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .workout-gradient {
+    @apply bg-gradient-to-br from-blue-50 via-white to-indigo-50;
+  }
+  
+  .card-hover {
+    @apply hover:shadow-md transition-all duration-200 hover:-translate-y-1;
+  }
+  
+  .animate-number {
+    animation: countUp 0.6s ease-out;
+  }
+  
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* Плавная прокрутка */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Стили для выпадающих списков */
+.select-content {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Улучшенные touch-стили для мобильных устройств */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Исправление свайпов в выпадающих списках - ОПТИМИЗИРОВАННАЯ ВЕРСИЯ */
+[data-radix-select-trigger] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  position: relative;
+  /* Убираем outline на фокусе для лучшего UX */
+  outline: none;
+  border: 1px solid hsl(var(--border));
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+[data-radix-select-trigger]:focus {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+}
+
+[data-radix-select-content] {
+  /* Критически важно: разрешаем только вертикальный скролл */
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Стабилизируем скролл */
+  scroll-behavior: smooth;
+  /* Предотвращаем закрытие при скролле */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Убираем bounce эффект на iOS */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+[data-radix-select-item] {
+  touch-action: manipulation;
+  cursor: pointer;
+  position: relative;
+  -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
+  min-height: 48px; /* Минимальная высота для touch targets */
+  display: flex;
+  align-items: center;
+  padding: 12px 16px; /* Оптимальные отступы для touch */
+  /* Предотвращение выделения текста */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Плавные переходы */
+  transition: background-color 0.15s ease, color 0.15s ease;
+  /* Убираем стандартные стили браузера */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Предотвращение конфликтов свайпов - ключевая часть */
+[data-radix-select-viewport] {
+  /* КРИТИЧНО: Разрешаем ТОЛЬКО вертикальную прокрутку */
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: auto; /* Не используем smooth во viewport для лучшей производительности */
+  overscroll-behavior-y: contain;
+  overscroll-behavior-x: none;
+  /* Предотвращение горизонтального скролла */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Улучшенные стили hover/active состояний */
+[data-radix-select-item]:hover:not([data-disabled]) {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+[data-radix-select-item][data-state="checked"] {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+[data-radix-select-item]:active:not([data-disabled]) {
+  background-color: hsl(var(--primary) / 0.9);
+  color: hsl(var(--primary-foreground));
+  transform: scale(0.98); /* Легкий эффект нажатия */
+}
+
+/* Дополнительная защита для мобильных устройств */
+@media (pointer: coarse) {
+  [data-radix-select-item] {
+    min-height: 52px;
+    padding: 16px 20px;
+    font-size: 16px; /* Предотвращает zoom на iOS */
+  }
+  
+  [data-radix-select-trigger] {
+    min-height: 52px;
+    padding: 16px 20px;
+    font-size: 16px;
+  }
+  
+  /* Увеличиваем задержку на мобильных */
+  [data-radix-select-content].scroll-cooldown {
+    transition: all 0.2s;
+  }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 640px) {
+  .mobile-padding {
+    @apply px-3 py-2;
+  }
+  
+  /* Больше отступы для touch элементов */
+  .touch-manipulation {
+    min-height: 48px;
+    padding: 14px 18px;
+  }
+  
+  /* Улучшенная видимость кнопок на мобильных */
+  .btn-mobile {
+    @apply min-h-[48px] px-4 py-3;
+  }
+  
+  /* Увеличенные области касания */
+  [data-radix-select-item] {
+    min-height: 48px;
+    padding: 14px 18px;
+    font-size: 16px; /* Предотвращает zoom на iOS */
+  }
+  
+  [data-radix-select-trigger] {
+    min-height: 48px;
+    padding: 14px 18px;
+    font-size: 16px; /* Предотвращает zoom на iOS */
+  }
+}
+
+/* Стили для улучшения взаимодействия */
+[data-radix-select-trigger]:hover:not([data-disabled]) {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+[data-radix-select-trigger]:active:not([data-disabled]) {
+  transform: scale(0.98);
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+[data-radix-select-item]:hover:not([data-disabled]) {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+[data-radix-select-item]:active:not([data-disabled]) {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Дополнительные классы для line-clamp */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
