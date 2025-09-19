@@ -183,82 +183,87 @@ export default function StatisticsView() {
 
       {statisticsData && chartData.length > 0 && !loadingStats && (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             <Card>
-              <CardContent className="p-4">
-                <div className="text-sm text-muted-foreground">Максимальный вес</div>
-                <div className="text-2xl font-bold">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <div className="text-xs sm:text-sm text-muted-foreground mb-1">Максимальный вес</div>
+                <div className="text-lg sm:text-2xl font-bold">
                   {stats?.maxWeight === 0 ? 'Собств.' : `${stats?.maxWeight} кг`}
                 </div>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="p-4">
-                <div className="text-sm text-muted-foreground">Прогресс</div>
-                <div className="text-2xl font-bold text-green-600">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <div className="text-xs sm:text-sm text-muted-foreground mb-1">Прогресс</div>
+                <div className="text-lg sm:text-2xl font-bold text-green-600">
                   {(stats?.improvement ?? 0) > 0 ? '+' : ''}{stats?.improvement ?? 0} кг
                 </div>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="p-4">
-                <div className="text-sm text-muted-foreground">Улучшение</div>
-                <div className="text-2xl font-bold text-blue-600">
+              <CardContent className="p-3 sm:p-4 text-center">
+                <div className="text-xs sm:text-sm text-muted-foreground mb-1">Улучшение</div>
+                <div className="text-lg sm:text-2xl font-bold text-blue-600">
                   {(stats?.improvementPercent ?? 0) > 0 ? '+' : ''}{(stats?.improvementPercent ?? 0).toFixed(1)}%
                 </div>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="p-4">
-                <div className="text-sm text-muted-foreground">Тренировок</div>
-                <div className="text-2xl font-bold">{stats?.totalWorkouts}</div>
+              <CardContent className="p-3 sm:p-4 text-center">
+                <div className="text-xs sm:text-sm text-muted-foreground mb-1">Тренировок</div>
+                <div className="text-lg sm:text-2xl font-bold">{stats?.totalWorkouts}</div>
               </CardContent>
             </Card>
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                Прогресс по весам - {statisticsData?.exercise?.name}
+              <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
+                <Activity className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+                <span className="truncate">
+                  <span className="hidden sm:inline">Прогресс по весам - </span>
+                  <span className="sm:hidden">Прогресс - </span>
+                  {statisticsData?.exercise?.name}
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-80 w-full">
+              <div className="h-64 sm:h-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
+                  <LineChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 50 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="date" 
-                      tick={{ fontSize: 10 }} 
+                      tick={{ fontSize: 8 }} 
                       tickLine={false}
                       angle={-45}
                       textAnchor="end"
-                      height={60}
+                      height={50}
                       interval="preserveStartEnd"
                     />
                     <YAxis 
-                      tick={{ fontSize: 10 }} 
+                      tick={{ fontSize: 8 }} 
                       tickLine={false}
+                      width={30}
                       label={{ 
-                        value: 'Вес (кг)', 
+                        value: 'кг', 
                         angle: -90, 
                         position: 'insideLeft', 
-                        style: { textAnchor: 'middle', fontSize: 11 } 
+                        style: { textAnchor: 'middle', fontSize: 10 } 
                       }}
                     />
                     <Tooltip 
                       labelFormatter={(label) => `Дата: ${label}`}
                       formatter={(value, name) => [`${value} кг`, 'Вес']}
-                      contentStyle={{ fontSize: 11 }}
+                      contentStyle={{ fontSize: 10, padding: '6px 8px' }}
                     />
                     <Line 
                       type="monotone" 
                       dataKey="weight" 
                       stroke="#3b82f6" 
-                      strokeWidth={3}
-                      dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
-                      activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2 }}
+                      strokeWidth={2}
+                      dot={{ fill: '#3b82f6', strokeWidth: 1, r: 3 }}
+                      activeDot={{ r: 5, stroke: '#3b82f6', strokeWidth: 2 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>

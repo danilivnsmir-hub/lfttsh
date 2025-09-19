@@ -401,30 +401,33 @@ export default function WorkoutTracker() {
                     <Plus className="h-4 w-4" />
                   </Button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className="max-w-full sm:max-w-md mx-4 sm:mx-auto">
                   <DialogHeader>
-                    <DialogTitle>Добавить упражнение</DialogTitle>
+                    <DialogTitle className="text-base sm:text-lg">Добавить упражнение</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="exercise-name">Название упражнения</Label>
+                      <Label htmlFor="exercise-name" className="text-sm">Название упражнения</Label>
                       <Input
                         id="exercise-name"
                         value={customExerciseName}
                         onChange={(e) => setCustomExerciseName(e.target.value)}
                         placeholder="Введите название"
+                        className="mt-1"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="muscle-group">Группа мышц</Label>
+                      <Label htmlFor="muscle-group" className="text-sm">Группа мышц</Label>
                       <Input
                         id="muscle-group"
                         value={customMuscleGroup}
                         onChange={(e) => setCustomMuscleGroup(e.target.value)}
                         placeholder="Например: Грудь, Спина, Ноги..."
+                        className="mt-1"
                       />
                     </div>
-                    <Button onClick={addCustomExercise} className="w-full">
+                    <Button onClick={addCustomExercise} className="w-full text-sm sm:text-base">
+                      <Plus className="h-4 w-4 mr-2" />
                       Добавить упражнение
                     </Button>
                   </div>
@@ -561,12 +564,12 @@ export default function WorkoutTracker() {
 
       {currentSets.length > 0 && (
         <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-orange-600" />
-                Текущая тренировка ({currentSets.length} подходов)
-                <span className="text-sm font-normal text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+          <CardHeader className="pb-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-orange-600 flex-shrink-0" />
+                <span className="truncate">Текущая тренировка ({currentSets.length})</span>
+                <span className="text-xs font-normal text-orange-600 bg-orange-100 px-2 py-1 rounded-full flex-shrink-0">
                   Черновик
                 </span>
               </CardTitle>
@@ -574,19 +577,20 @@ export default function WorkoutTracker() {
                 variant="outline"
                 size="sm"
                 onClick={clearCurrentWorkout}
-                className="text-red-600 hover:text-red-700"
+                className="text-red-600 hover:text-red-700 w-full sm:w-auto"
               >
-                <Trash2 className="h-4 w-4 mr-1" />
-                Очистить
+                <Trash2 className="h-4 w-4 mr-2 sm:mr-1" />
+                <span className="sm:hidden">Очистить тренировку</span>
+                <span className="hidden sm:inline">Очистить</span>
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-2 sm:space-y-3">
             {currentSets.map((set, index) => (
-              <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                <div className="flex-1">
-                  <div className="font-medium">{set?.exercise_name}</div>
-                  <div className="text-sm text-muted-foreground">
+              <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-sm sm:text-base truncate">{set?.exercise_name}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">
                     {set?.weight === 0 ? 'Собственный вес' : `${set?.weight} кг`} × {set?.reps} раз
                   </div>
                 </div>
@@ -594,25 +598,31 @@ export default function WorkoutTracker() {
                   variant="outline"
                   size="icon"
                   onClick={() => removeSet(index)}
+                  className="h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               </div>
             ))}
             
-            <div className="flex gap-2">
+            <div className="pt-2 space-y-3">
               <Button 
                 onClick={saveWorkout} 
                 disabled={saving} 
-                className="flex-1"
+                className="w-full text-sm sm:text-base"
               >
                 <Save className="h-4 w-4 mr-2" />
-                {saving ? 'Сохранение...' : 'Сохранить тренировку в историю'}
+                <span className="sm:hidden">
+                  {saving ? 'Сохранение...' : 'Сохранить в историю'}
+                </span>
+                <span className="hidden sm:inline">
+                  {saving ? 'Сохранение...' : 'Сохранить тренировку в историю'}
+                </span>
               </Button>
-            </div>
-            
-            <div className="text-xs text-muted-foreground text-center p-2 bg-muted/50 rounded-lg">
-              💾 Данные автоматически сохраняются как черновик и восстановятся при перезагрузке страницы
+              
+              <div className="text-xs text-muted-foreground text-center p-2 bg-muted/50 rounded-lg leading-relaxed">
+                💾 Данные автоматически сохраняются как черновик и восстановятся при перезагрузке страницы
+              </div>
             </div>
           </CardContent>
         </Card>

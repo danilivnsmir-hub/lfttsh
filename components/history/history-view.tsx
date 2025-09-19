@@ -140,35 +140,47 @@ export default function HistoryView() {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
+        <CardHeader className="pb-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <CardTitle className="flex items-center gap-2 flex-shrink-0">
               <History className="h-5 w-5" />
-              История тренировок
+              <span className="truncate">История тренировок</span>
               {workouts.length > 0 && (
-                <span className="text-sm font-normal text-muted-foreground">
+                <span className="text-sm font-normal text-muted-foreground flex-shrink-0">
                   ({workouts.length})
                 </span>
               )}
             </CardTitle>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row sm:gap-2 w-full sm:w-auto">
               <Button 
                 onClick={refreshWorkouts} 
                 disabled={loading}
                 variant="outline"
                 size="sm"
+                className="w-full sm:w-auto justify-center sm:justify-start"
               >
-                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                {loading ? 'Загрузка...' : 'Обновить'}
+                <RefreshCw className={`h-4 w-4 sm:mr-2 ${loading ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">
+                  {loading ? 'Загрузка...' : 'Обновить'}
+                </span>
+                <span className="sm:hidden">
+                  {loading ? 'Загрузка...' : 'Обновить'}
+                </span>
               </Button>
               <Button 
                 onClick={exportToCSV} 
                 disabled={exporting || workouts.length === 0}
                 variant="outline"
                 size="sm"
+                className="w-full sm:w-auto justify-center sm:justify-start"
               >
-                <Download className="h-4 w-4 mr-2" />
-                {exporting ? 'Экспорт...' : 'CSV'}
+                <Download className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">
+                  {exporting ? 'Экспорт...' : 'Скачать CSV'}
+                </span>
+                <span className="sm:hidden">
+                  {exporting ? 'Экспорт...' : 'CSV'}
+                </span>
               </Button>
             </div>
           </div>
@@ -188,39 +200,41 @@ export default function HistoryView() {
             <div className="space-y-3">
               {workouts.map((workout) => (
                 <Card key={workout?.id} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-4">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2 flex-wrap">
-                          <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                          <span className="font-medium">
-                            {formatDate(workout?.date)}
-                          </span>
-                          <span className="text-sm text-muted-foreground">
-                            в {formatDateTime(workout?.date).split(', ')[1]}
-                          </span>
+                  <CardContent className="p-3 sm:p-4">
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-2 flex-wrap">
+                            <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <span className="font-medium text-sm sm:text-base">
+                              {formatDate(workout?.date)}
+                            </span>
+                            <span className="text-xs sm:text-sm text-muted-foreground">
+                              в {formatDateTime(workout?.date).split(', ')[1]}
+                            </span>
+                          </div>
+                          
+                          <div className="text-xs sm:text-sm text-muted-foreground mb-2">
+                            {getUniqueExercises(workout)} упражнений • {getTotalSets(workout)} подходов
+                          </div>
                         </div>
                         
-                        <div className="text-sm text-muted-foreground mb-2">
-                          {getUniqueExercises(workout)} упражнений, {getTotalSets(workout)} подходов
-                        </div>
-                        
-                        <div className="text-sm text-muted-foreground line-clamp-2 sm:truncate">
-                          {getWorkoutSummary(workout)}
+                        <div className="flex-shrink-0 w-full sm:w-auto">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openWorkoutDetails(workout)}
+                            className="w-full sm:w-auto text-xs sm:text-sm"
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            <span className="sm:hidden">Детали</span>
+                            <span className="hidden sm:inline">Подробнее</span>
+                          </Button>
                         </div>
                       </div>
                       
-                      <div className="flex-shrink-0 w-full sm:w-auto">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => openWorkoutDetails(workout)}
-                          className="w-full sm:w-auto"
-                        >
-                          <Eye className="h-4 w-4 mr-2" />
-                          <span className="hidden sm:inline">Подробнее</span>
-                          <span className="sm:hidden">Детали</span>
-                        </Button>
+                      <div className="text-xs sm:text-sm text-muted-foreground line-clamp-2 overflow-hidden">
+                        {getWorkoutSummary(workout)}
                       </div>
                     </div>
                   </CardContent>
@@ -232,53 +246,57 @@ export default function HistoryView() {
       </Card>
 
       <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-full sm:max-w-2xl max-h-[90vh] sm:max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              Тренировка от {selectedWorkout ? formatDate(selectedWorkout.date) : ''}
+            <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Calendar className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+              <span className="truncate">
+                Тренировка от {selectedWorkout ? formatDate(selectedWorkout.date) : ''}
+              </span>
             </DialogTitle>
           </DialogHeader>
           
           {selectedWorkout && (
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="p-3 bg-muted rounded-lg">
-                  <div className="text-2xl font-bold">{getUniqueExercises(selectedWorkout)}</div>
-                  <div className="text-sm text-muted-foreground">Упражнений</div>
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+                <div className="p-2 sm:p-3 bg-muted rounded-lg">
+                  <div className="text-lg sm:text-2xl font-bold">{getUniqueExercises(selectedWorkout)}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Упражнений</div>
                 </div>
-                <div className="p-3 bg-muted rounded-lg">
-                  <div className="text-2xl font-bold">{getTotalSets(selectedWorkout)}</div>
-                  <div className="text-sm text-muted-foreground">Подходов</div>
+                <div className="p-2 sm:p-3 bg-muted rounded-lg">
+                  <div className="text-lg sm:text-2xl font-bold">{getTotalSets(selectedWorkout)}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Подходов</div>
                 </div>
-                <div className="p-3 bg-muted rounded-lg">
-                  <div className="text-2xl font-bold">
+                <div className="p-2 sm:p-3 bg-muted rounded-lg">
+                  <div className="text-lg sm:text-2xl font-bold">
                     {formatDateTime(selectedWorkout.date).split(', ')[1]}
                   </div>
-                  <div className="text-sm text-muted-foreground">Время</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Время</div>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <h3 className="font-semibold">Подходы:</h3>
-                {selectedWorkout?.workout_sets?.map((set, index) => (
-                  <div key={set?.id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="flex-1">
-                      <div className="font-medium">{set?.exercise?.name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {set?.exercise?.muscle_group}
+                <h3 className="font-semibold text-sm sm:text-base">Подходы:</h3>
+                <div className="space-y-2 sm:space-y-3">
+                  {selectedWorkout?.workout_sets?.map((set, index) => (
+                    <div key={set?.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg gap-2 sm:gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-sm sm:text-base truncate">{set?.exercise?.name}</div>
+                        <div className="text-xs sm:text-sm text-muted-foreground">
+                          {set?.exercise?.muscle_group}
+                        </div>
+                      </div>
+                      <div className="text-left sm:text-right flex-shrink-0">
+                        <div className="font-medium text-sm sm:text-base">
+                          {set?.weight === 0 ? 'Собственный вес' : `${set?.weight} кг`}
+                        </div>
+                        <div className="text-xs sm:text-sm text-muted-foreground">
+                          {set?.reps} повторений
+                        </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="font-medium">
-                        {set?.weight === 0 ? 'Собственный вес' : `${set?.weight} кг`}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {set?.reps} повторений
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           )}

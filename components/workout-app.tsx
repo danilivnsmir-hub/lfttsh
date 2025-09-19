@@ -81,31 +81,31 @@ export default function WorkoutApp() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3, delay: 0.1 }}
             >
-              <Card className="p-1 w-full sm:w-auto">
-                <TabsList className="grid w-full grid-cols-3 gap-1 touch-manipulation">
+              <Card className="p-1 w-full sm:w-auto overflow-hidden">
+                <TabsList className="grid w-full grid-cols-3 gap-0.5 sm:gap-1 touch-manipulation h-auto min-h-[44px]">
                   <TabsTrigger 
                     value="workout" 
                     onClick={() => setActiveTab('workout')}
-                    className="flex items-center gap-1 sm:gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white cursor-pointer touch-manipulation py-2 px-2 sm:px-4"
+                    className="flex items-center justify-center gap-1 sm:gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white cursor-pointer touch-manipulation py-2.5 px-1 sm:px-3 text-xs sm:text-sm min-h-[40px]"
                   >
                     <Dumbbell className="h-4 w-4 flex-shrink-0" />
-                    <span className="text-xs sm:text-sm truncate">Тренировка</span>
+                    <span className="truncate leading-tight">Тренировка</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="statistics"
                     onClick={() => setActiveTab('statistics')}
-                    className="flex items-center gap-1 sm:gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white cursor-pointer touch-manipulation py-2 px-2 sm:px-4"
+                    className="flex items-center justify-center gap-1 sm:gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white cursor-pointer touch-manipulation py-2.5 px-1 sm:px-3 text-xs sm:text-sm min-h-[40px]"
                   >
                     <TrendingUp className="h-4 w-4 flex-shrink-0" />
-                    <span className="text-xs sm:text-sm truncate">Статистика</span>
+                    <span className="truncate leading-tight">Статистика</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="history"
                     onClick={() => setActiveTab('history')}
-                    className="flex items-center gap-1 sm:gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white cursor-pointer touch-manipulation py-2 px-2 sm:px-4"
+                    className="flex items-center justify-center gap-1 sm:gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white cursor-pointer touch-manipulation py-2.5 px-1 sm:px-3 text-xs sm:text-sm min-h-[40px]"
                   >
                     <History className="h-4 w-4 flex-shrink-0" />
-                    <span className="text-xs sm:text-sm truncate">История</span>
+                    <span className="truncate leading-tight">История</span>
                   </TabsTrigger>
                 </TabsList>
               </Card>

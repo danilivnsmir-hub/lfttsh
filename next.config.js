@@ -1,34 +1,19 @@
+const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: process.env.NEXT_DIST_DIR || '.next',
+  output: process.env.NEXT_OUTPUT_MODE,
+  experimental: {
+    outputFileTracingRoot: path.join(__dirname, '../'),
+  },
   eslint: {
-    ignoreDuringBuilds: true, // Отключаем ESLint при сборке
+    ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: false,
   },
-  images: {
-    domains: [],
-    unoptimized: false,
-  },
-  poweredByHeader: false,
-  reactStrictMode: true,
-  swcMinify: true,
-  // Настройки для Vercel
-  experimental: {
-    serverComponentsExternalPackages: ['plotly.js'],
-  },
-  // Исключаем проблемные зависимости из bundle
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        path: false,
-      };
-    }
-    return config;
-  },
+  images: { unoptimized: true },
 };
 
 module.exports = nextConfig;
